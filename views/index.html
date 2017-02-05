@@ -25,7 +25,7 @@
           <li>{{ logs }}</li>  
         </ul>
       <ul>
-        <li>You have {{ data.player.moves }} moves left and {{ data.player.hp }} hit points</li>
+        <li>You have {{ data.player.hp }} hit points</li>
         <li>Your score is {{ data.player.score }} points</li>
       </ul>
       <ul id="error"></ul>
@@ -37,6 +37,7 @@
       </div>
       
       <div id="dirCtrl">
+        Moves: {{ data.player.moves }} -
         {% if data.map.getTile(data.player.position.x, data.player.position.y).doors[3] == 1 %}
         <button id="West">&lt;</button>
         {% endif %}

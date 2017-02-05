@@ -83,7 +83,6 @@ app.get("/run", function (request, response) {
   data.map = map.createMap();
   data.player.position = { x : 0, y : 2 };
   data.player.hp = 10;
-  data.player.moves = 8;
   
   logs = [];
   
@@ -104,6 +103,12 @@ app.get("/combat/:index", function (request, response) {
 
 app.get("/loot/:index", function (request, response) {
   data.player.inventory.transferItem(data.map.getPlayerTile(data.player).itemStack, request.params.index);
+  response.json({ "status" : "done" });
+});
+
+app.get("/inventory/:index/use", function (request, response) {
+  data.player.inventory.removeItem(request.params.index);
+  data.player.moves += 3;
   response.json({ "status" : "done" });
 });
 
