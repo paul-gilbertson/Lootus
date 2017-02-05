@@ -1,0 +1,35 @@
+/* styles */
+/* called by your view template */
+
+/* You might want to try something fancier: */
+/* less: http://lesscss.org/ */
+
+
+footer > a {
+  color: #BBBBBB;
+}
+
+.fire {
+  background-color: #FF0000;
+}
+
+.card {
+  padding: 16px;
+  margin: 8px;
+  background-color: #eee;
+  /*min-height: 480px;*/
+}
+
+.card-top {
+  min-height: 64px;
+  text-align: center;
+}
+
+.card-bottom {
+  min-height: 64px;
+  text-align: center; 
+}
+
+.tile {
+  width: initial;
+}

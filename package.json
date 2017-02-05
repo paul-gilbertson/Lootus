@@ -1,0 +1,31 @@
+{
+	"//1": "describes your app and its dependencies",
+	"//2": "https://docs.npmjs.com/files/package.json",
+	"//3": "updating this file will download and update your packages",
+	"name": "Lootus",
+	"version": "0.0.1",
+	"description": "Card based dungeon crawler",
+	"main": "server.js",
+	"scripts": {
+		"start": "node server.js"
+	},
+	"dependencies": {
+		"express": "^4.14.1",
+		"nunjucks": "^3.0.0",
+		"express-nunjucks": "^2.1.2"
+	},
+	"engines": {
+		"node": "6.9.1"
+	},
+	"repository": {
+		"url": "https://gomix.com/#!/project/welcome-project"
+	},
+	"keywords": [
+		"node",
+		"gomix",
+		"express",
+    "nunjucks",
+    "dungeon",
+    "roguelike"
+	]
+}
