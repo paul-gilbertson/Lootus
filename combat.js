@@ -76,12 +76,12 @@ function MobStack() {
     this.addMob(t[Math.floor(Math.random() * t.length)]);
   };
   
-  this.spawnRoom = function(tile) {
+  this.spawnRoom = function(mobCount) {
     this.mobs = [];
     
-    if (tile.mobs == 0) return;
+    if (mobCount == 0) return;
     
-    for (var x = 0; x < tile.mobs; x++) {
+    for (var x = 0; x < mobCount; x++) {
       this.spawnMob();
     }
   };

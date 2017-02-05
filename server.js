@@ -10,11 +10,8 @@ var app = express();
 
 var data = {
   player: new combat.Player(),
-  mobStack: new combat.MobStack(),
   map: map.createMap()
 };
-
-data.mobStack.spawnRoom(data.map.getPlayerTile(data.player));
 
 var logs = [];
 
@@ -60,8 +57,6 @@ app.get("/move/:direction", function (request, response) {
     if (data.player.moves < 0) {
       data.player.status = "dead";
       data.player.statusData = { killType : "moves" };
-    } else {
-      data.mobStack.spawnRoom(data.map.getPlayerTile(data.player));
     }
   } else if (ct.doors[request.params.direction] == 2) {
     data.player.status = "home";
@@ -73,11 +68,8 @@ app.get("/move/:direction", function (request, response) {
 app.get("/reset", function (request, response) {
   data = {
     player: new combat.Player(),
-    mobStack: new combat.MobStack(),
     map: map.createMap()
   };
-  
-  data.mobStack.spawnRoom(data.map.getPlayerTile(data.player));
   
   logs = [];
   
@@ -87,13 +79,10 @@ app.get("/reset", function (request, response) {
 app.get("/run", function (request, response) {
   data.player.status = "alive";
   data.player.statusData = {};
-  data.mobStack = new combat.MobStack();
   data.map = map.createMap();
   data.player.position = { x : 0, y : 2 };
   data.player.hp = 10;
   data.player.moves = 8;
-  
-  data.mobStack.spawnRoom(data.map.getPlayerTile(data.player));
   
   logs = [];
   
@@ -102,8 +91,8 @@ app.get("/run", function (request, response) {
 
 app.get("/combat/:index", function (request, response) {
   logs = [];
-  combat.doCombat(data.player, data.mobStack, request.params.index, logs);
-  combat.doMonsterMove(data.mobStack, data.player, logs);
+  combat.doCombat(data.player, data.map.getPlayerTile(data.player).mobStack, request.params.index, logs);
+  combat.doMonsterMove(data.map.getPlayerTile(data.player).mobStack, data.player, logs);
   
   if (data.player.hp <= 0) {
     response.json({ "status" : "dead" });

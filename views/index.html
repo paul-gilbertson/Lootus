@@ -59,7 +59,7 @@
       
       <div id="cards" class="row">
         <div id="mob">
-          {% for mob in data.mobStack.mobs %}
+          {% for mob in data.map.getPlayerTile(data.player).mobStack.mobs %}
             {% include "fragment/mob.html" %}
           {% endfor %}
         </div>
