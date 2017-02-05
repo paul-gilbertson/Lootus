@@ -41,4 +41,14 @@ $(function() {
       }
     });
   });
+  
+  $('button#btnPick').click(function () {
+    $.ajax({
+      url: '/loot/0',
+      dataType: "json",
+      complete: function() {
+        window.location.reload(true);
+      }
+    });
+  });
 });

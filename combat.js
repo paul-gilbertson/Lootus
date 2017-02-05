@@ -1,4 +1,5 @@
 var monsterTypes = require('./monsterTypes.json');
+var item = require('./item.js');
 var RNG = new Dice();
 
 function Dice() {
@@ -31,16 +32,18 @@ function Player() {
   this.attack = { x : 1, y : 3 };
   this.score = 0;
   this.position = { x : 0, y : 2 };
+  this.inventory = new item.ItemStack();
 }
 
-var doCombat = function(player, mobStack, i, logs) {
-  var mob = mobStack.mobs[i];
+var doCombat = function(player, tile, i, logs) {
+  var mob = tile.mobStack.mobs[i];
   var damage = RNG.roll(player.attack.x, player.attack.y);
   mob.hp -= damage;
   
   if (mob.hp <= 0) {
     player.score += mob.xp;
-    mobStack.removeMob(i);
+    tile.mobStack.removeMob(i);
+    tile.itemStack.addItem(0);
     logs.push("You attack the " + mob.name + " hitting it for " + damage + " damage and killing it (" + mob.xp + " xp).");
   } else {
     logs.push("You attack the " + mob.name + " hitting it for " + damage + " damage.");

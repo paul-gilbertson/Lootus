@@ -1,5 +1,6 @@
 var mtt = require('./mapTileTypes.json');
 var combat = require('./combat.js');
+var item = require('./item.js');
 
 function MapTile(data) {
   this.tileType = data.id;
@@ -14,6 +15,8 @@ function MapTile(data) {
   this.mobs = data.mobs;
   this.mobStack = new combat.MobStack();
   this.mobStack.spawnRoom(this.mobs);
+  
+  this.itemStack = new item.ItemStack();
   
   this.toString = function() {
     return this.display.join('\n');

@@ -23,6 +23,16 @@
       <h3>Get in. Grab the loot. Get out.</h3>
       
       <p>You are home. Score: {{ data.player.score }}</p>
+      
+      <h2>Inventory</h2>
+      <div id="invItems" class="row">
+        <div id="invItem">
+          {% for item in data.player.inventory.items %}
+            {% include "fragment/item.html" %}
+          {% endfor %}
+        </div>
+      </div>
+
       <a href="/run">Run again</a>
     </div>
   </body>

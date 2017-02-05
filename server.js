@@ -4,6 +4,7 @@
 // init project
 var combat = require('./combat.js');
 var map = require('./map.js');
+var item = require('./item.js');
 var nunjucks = require('nunjucks');
 var express = require('express');
 var app = express();
@@ -91,7 +92,7 @@ app.get("/run", function (request, response) {
 
 app.get("/combat/:index", function (request, response) {
   logs = [];
-  combat.doCombat(data.player, data.map.getPlayerTile(data.player).mobStack, request.params.index, logs);
+  combat.doCombat(data.player, data.map.getPlayerTile(data.player), request.params.index, logs);
   combat.doMonsterMove(data.map.getPlayerTile(data.player).mobStack, data.player, logs);
   
   if (data.player.hp <= 0) {
@@ -99,6 +100,11 @@ app.get("/combat/:index", function (request, response) {
   } else {
     response.json({ "status" : "alive" });
   }
+});
+
+app.get("/loot/:index", function (request, response) {
+  data.player.inventory.transferItem(data.map.getPlayerTile(data.player).itemStack, request.params.index);
+  response.json({ "status" : "done" });
 });
 
 app.get("/mtt", function (request, response) {
