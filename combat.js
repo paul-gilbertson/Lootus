@@ -75,8 +75,7 @@ function MobStack() {
   };
   
   this.spawnMob = function() {
-    var t = ["Kobold", "Slime", "Orc"];
-    this.addMob(t[Math.floor(Math.random() * t.length)]);
+    this.addMob(Math.floor(Math.random() * monsterTypes.length));
   };
   
   this.spawnRoom = function(mobCount) {

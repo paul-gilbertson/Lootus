@@ -1,7 +1,7 @@
 $(function() {
-  $('button#btnUse').click(function () {
+  $('div.itemCard').click(function () {
     $.ajax({
-      url: '/inventory/0/use',
+      url: '/inventory/' + this.getAttribute('index') + '/use',
       dataType: "json",
       complete: function() {
         window.location.reload(true);

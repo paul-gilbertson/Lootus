@@ -32,19 +32,20 @@ $(function() {
   $('button#XSouth').click(function () { moveFn(2); });
   $('button#XWest').click(function () { moveFn(3); });
   
-  $('button#btnAttack').click(function () {
-    $.ajax({
-      url: '/combat/0',
-      dataType: "json",
-      complete: function() {
-        window.location.reload(true);
-      }
-    });
+  $('div.mobCard').click(function () {
+      $.ajax({
+        url: '/combat/' + this.getAttribute('index'),
+        dataType: "json",
+        complete: function() {
+          window.location.reload(true);
+        }
+      });
+    //});
   });
-  
-  $('button#btnPick').click(function () {
+
+  $('#item div.itemCard').click(function () {
     $.ajax({
-      url: '/loot/0',
+      url: '/loot/' + this.getAttribute('index'),
       dataType: "json",
       complete: function() {
         window.location.reload(true);

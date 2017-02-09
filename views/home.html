@@ -28,14 +28,13 @@
       <div id="invItems" class="row">
         <div id="invItem">
           {% for item in data.player.inventory.items %}
+            {% set i = loop.index0 %}
             {% include "fragment/item.html" %}
           {% endfor %}
         </div>
       </div>
 
-      <button id="btnUse">Use</button>
-      
-      <a href="/run">Run again ( {{ data.player.moves }} moves )</a>
+      <a class="btn btn-primary" href="/run">Run again ( {{ data.player.moves }} moves )</a>
     </div>
     
     <script src="/home.js"></script>

@@ -1,20 +1,26 @@
-{
-  "Kobold" : {
+[
+  {
     "name" : "Kobold",
     "hp" : 3,
     "attack" : { "x" : 1, "y" : 3 },
     "xp" : 2
   },
-  "Slime" : {
+  {
     "name" : "Slime",
     "hp" : 1,
     "attack" : { "x" : 1, "y" : 1 },
     "xp" : 1
   },
-  "Orc" : {
+  {
     "name" : "Orc",
     "hp" : 3,
     "attack" : { "x" : 2, "y" : 2 },
     "xp" : 5
+  },
+  {
+    "name" : "Troll",
+    "hp" : 8,
+    "attack" : { "x" : 1, "y" : 2 },
+    "xp" : 10
   }
-}
+]

@@ -32,64 +32,65 @@
       </div>
       
       <h2>Map</h2>
-      <div id="tile" class="tile">
-        <pre>{{ data.map.getTile(data.player.position.x, data.player.position.y).toString() }}</pre>
+      <div id="tile" class="mapTile">
+        <div class="mapTile">
+          <pre class="mapTile">{{ data.map.getTile(data.player.position.x, data.player.position.y).toString() }}</pre>
+        </div>
       </div>
       
       <div id="dirCtrl">
         Moves: {{ data.player.moves }} -
-        {% if data.map.getTile(data.player.position.x, data.player.position.y).doors[3] == 1 %}
-        <button id="West">&lt;</button>
-        {% endif %}
-        {% if data.map.getTile(data.player.position.x, data.player.position.y).doors[3] == 2 %}
-        <button id="XWest">&lt; Exit</button>
-        {% endif %}
-        {% if data.map.getTile(data.player.position.x, data.player.position.y).doors[0] == 1 %}
-        <button id="North">^</button>
-        {% endif %}
-        {% if data.map.getTile(data.player.position.x, data.player.position.y).doors[0] == 2 %}
-        <button id="XNorth">^ Exit</button>
-        {% endif %}
-        {% if data.map.getTile(data.player.position.x, data.player.position.y).doors[2] == 1 %}
-        <button id="South">v</button>
-        {% endif %}
-        {% if data.map.getTile(data.player.position.x, data.player.position.y).doors[2] == 2 %}
-        <button id="XSouth">v Exit</button>
-        {% endif %}
-        {% if data.map.getTile(data.player.position.x, data.player.position.y).doors[1] == 1 %}
-        <button id="East">&gt;</button>
-        {% endif %}
-        {% if data.map.getTile(data.player.position.x, data.player.position.y).doors[1] == 2 %}
-        <button id="XEast">&gt; Exit</button>
-        {% endif %}
+            {% if data.map.getTile(data.player.position.x, data.player.position.y).doors[3] == 1 %}
+            <button id="West">&lt;</button>
+            {% endif %}
+            {% if data.map.getTile(data.player.position.x, data.player.position.y).doors[3] == 2 %}
+            <button id="XWest">&lt; Exit</button>
+            {% endif %}
+          {% if data.map.getTile(data.player.position.x, data.player.position.y).doors[0] == 1 %}
+          <button id="North">^</button>
+          {% endif %}
+          {% if data.map.getTile(data.player.position.x, data.player.position.y).doors[0] == 2 %}
+          <button id="XNorth">^ Exit</button>
+          {% endif %}
+          {% if data.map.getTile(data.player.position.x, data.player.position.y).doors[2] == 1 %}
+          <button id="South">v</button>
+          {% endif %}
+          {% if data.map.getTile(data.player.position.x, data.player.position.y).doors[2] == 2 %}
+          <button id="XSouth">v Exit</button>
+          {% endif %}
+            {% if data.map.getTile(data.player.position.x, data.player.position.y).doors[1] == 1 %}
+            <button id="East">&gt;</button>
+            {% endif %}
+            {% if data.map.getTile(data.player.position.x, data.player.position.y).doors[1] == 2 %}
+            <button id="XEast">&gt; Exit</button>
+            {% endif %}
       </div>
       
       <h2>Mobs</h2>
       <div id="cards" class="row">
         <div id="mob">
           {% for mob in data.map.getPlayerTile(data.player).mobStack.mobs %}
+            {% set i = loop.index0 %}
             {% include "fragment/mob.html" %}
           {% endfor %}
         </div>
       </div>
       
-      <button id="btnAttack">Attack</button>
-    
       <h2>Items</h2>
       <div id="items" class="row">
         <div id="item">
           {% for item in data.map.getPlayerTile(data.player).itemStack.items %}
+            {% set i = loop.index0 %}
             {% include "fragment/item.html" %}
           {% endfor %}
         </div>
       </div>
       
-      <button id="btnPick">Pick Up</button>
-      
       <h2>Inventory</h2>
       <div id="invItems" class="row">
         <div id="invItem">
           {% for item in data.player.inventory.items %}
+            {% set i = loop.index0 %}
             {% include "fragment/item.html" %}
           {% endfor %}
         </div>

@@ -61,6 +61,8 @@ app.get("/move/:direction", function (request, response) {
     }
   } else if (ct.doors[request.params.direction] == 2) {
     data.player.status = "home";
+    
+    if (data.player.moves < 2) data.player.moves = 2;
   }
  
   response.sendStatus(200);

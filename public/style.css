@@ -30,6 +30,20 @@ footer > a {
   text-align: center; 
 }
 
-.tile {
-  width: initial;
+div.mapTile {
+  display: inline-block;
+}
+
+pre.mapTile {
+  display: inline-block;
+  margin: 0;
+}
+
+.vMapButton {
+  margin: auto;
+  display: block;
+}
+
+.hMapButton {
+  display: inline-block;
 }
