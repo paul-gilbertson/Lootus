@@ -21,14 +21,16 @@
       <h3>Get in. Grab the loot. Get out.</h3>
       
       <div id="log">
+        <p>
+           ID: {{ id }}
+        </p>
         <ul>
           <li>{{ logs }}</li>  
         </ul>
-      <ul>
-        <li>You have {{ data.player.hp }} hit points</li>
-        <li>Your score is {{ data.player.score }} points</li>
-      </ul>
-      <ul id="error"></ul>
+        <ul>
+          <li>You have {{ data.player.hp }} hit points</li>
+          <li>Your score is {{ data.player.score }} points</li>
+        </ul>
       </div>
       
       <h2>Map</h2>

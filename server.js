@@ -7,14 +7,19 @@ var map = require('./map.js');
 var item = require('./item.js');
 var nunjucks = require('nunjucks');
 var express = require('express');
+var session = require('express-session');
+var uuid = require('node-uuid');
 var app = express();
 
-var data = {
-  player: new combat.Player(),
-  map: map.createMap()
-};
+var dataSet = {};
 
-var logs = [];
+var newDataBlock = function () {
+  return {
+    player: new combat.Player(),
+    map: map.createMap(),
+    logs : []
+  };
+};
 
 // we've started you off with Express, 
 // but feel free to use whatever libs or frameworks you'd like through `package.json`.
@@ -27,94 +32,112 @@ nunjucks.configure('views', {
 // http://expressjs.com/en/starter/static-files.html
 app.set("view engine", "nunjucks");
 app.use(express.static('public'));
+app.use(session({
+  secret : 'Paradas',
+  resave : true,
+  saveUninitialized : true,
+  cookie : {}
+}));
+
+app.use(function (req, res, next) {
+  if (req.session.gid == undefined) {
+    req.session.gid = uuid.v4();
+    dataSet[req.session.gid] = newDataBlock();
+  }
+  
+  req.playerData = dataSet[req.session.gid];
+  
+  next();
+});
 
 // http://expressjs.com/en/starter/basic-routing.html
-app.get("/", function (req, resp) {
-  if (data.player.status == "dead") {
-    resp.render('dead.html', { score : data.player.score, statusData : data.player.statusData });
-  } else if (data.player.status == "home") {
-    resp.render('home.html', { data : data });
+app.get("/", function (req, res) {
+  if (req.playerData.status == "dead") {
+    res.render('dead.html', { score : req.playerData.player.score, statusData : req.playerData.player.statusData });
+  } else if (req.playerData.player.status == "home") {
+    res.render('home.html', { data : req.playerData });
   } else {
-    resp.render('index.html', { data : data, logs : logs.join(" ") });
+    res.render('index.html', { data : req.playerData, logs : req.playerData.logs.join(" "), id : req.session.gid });
   }
 });
 
-app.get("/data", function (request, response) {
-  response.send(data);
+app.get("/data", function (req, res) {
+  res.send(dataSet);
 });
 
-app.get("/move/:direction", function (request, response) {
+app.get("/move/:direction", function (req, res) {
+  var data = req.playerData;
   var ct = data.map.getPlayerTile(data.player);
-  if (ct == undefined || ct.doors[request.params.direction] == 0) { response.sendStatus(500); return; }
+  if (ct == undefined || ct.doors[req.params.direction] == 0) { res.sendStatus(500); return; }
   
-  if (request.params.direction == 0) { data.player.position.y--; }
-  else if (request.params.direction == 1) { data.player.position.x++; }
-  else if (request.params.direction == 2) { data.player.position.y++; }
-  else if (request.params.direction == 3) { data.player.position.x--; }
+  if (req.params.direction == 0) { data.player.position.y--; }
+  else if (req.params.direction == 1) { data.player.position.x++; }
+  else if (req.params.direction == 2) { data.player.position.y++; }
+  else if (req.params.direction == 3) { data.player.position.x--; }
   
-  if (ct.doors[request.params.direction] == 1) {
+  if (ct.doors[req.params.direction] == 1) {
     data.player.moves--;
 
     if (data.player.moves < 0) {
       data.player.status = "dead";
       data.player.statusData = { killType : "moves" };
     }
-  } else if (ct.doors[request.params.direction] == 2) {
+  } else if (ct.doors[req.params.direction] == 2) {
     data.player.status = "home";
     
     if (data.player.moves < 2) data.player.moves = 2;
   }
  
-  response.sendStatus(200);
+  res.sendStatus(200);
 });
 
-app.get("/reset", function (request, response) {
-  data = {
-    player: new combat.Player(),
-    map: map.createMap()
-  };
+app.get("/reset", function (req, res) {
+  dataSet[req.session.gid] = newDataBlock();  
   
-  logs = [];
-  
-  response.redirect('/');
+  res.redirect('/');
 });
 
-app.get("/run", function (request, response) {
+app.get("/run", function (req, res) {
+  var data = req.playerData;
   data.player.status = "alive";
   data.player.statusData = {};
   data.map = map.createMap();
   data.player.position = { x : 0, y : 2 };
   data.player.hp = 10;
   
-  logs = [];
+  data.logs = [];
   
-  response.redirect('/');
+  res.redirect('/');
 });
 
-app.get("/combat/:index", function (request, response) {
-  logs = [];
-  combat.doCombat(data.player, data.map.getPlayerTile(data.player), request.params.index, logs);
-  combat.doMonsterMove(data.map.getPlayerTile(data.player).mobStack, data.player, logs);
+app.get("/combat/:index", function (req, res) {
+  var data = req.playerData;
+  data.logs = [];
+  combat.doCombat(data.player, data.map.getPlayerTile(data.player), req.params.index, data.logs);
+  combat.doMonsterMove(data.map.getPlayerTile(data.player).mobStack, data.player, data.logs);
   
   if (data.player.hp <= 0) {
-    response.json({ "status" : "dead" });
+    res.json({ "status" : "dead" });
   } else {
-    response.json({ "status" : "alive" });
+    res.json({ "status" : "alive" });
   }
 });
 
-app.get("/loot/:index", function (request, response) {
-  data.player.inventory.transferItem(data.map.getPlayerTile(data.player).itemStack, request.params.index);
-  response.json({ "status" : "done" });
+app.get("/loot/:index", function (req, res) {
+  var data = req.playerData;
+  data.player.inventory.transferItem(data.map.getPlayerTile(data.player).itemStack, req.params.index);
+  res.json({ "status" : "done" });
 });
 
-app.get("/inventory/:index/use", function (request, response) {
-  data.player.inventory.removeItem(request.params.index);
+app.get("/inventory/:index/use", function (req, res) {
+  var data = req.playerData;
+  data.player.inventory.removeItem(req.params.index);
   data.player.moves += 3;
-  response.json({ "status" : "done" });
+  res.json({ "status" : "done" });
 });
 
-app.get("/mtt", function (request, response) {
+app.get("/mtt", function (req, res) {
+  var data = req.playerData;
   var output = "";
   var m = data.map;
   var mobs = 0;
@@ -134,7 +157,7 @@ app.get("/mtt", function (request, response) {
   
   for (var t in m.tiles) { mobs += m.tiles[t].mobs; }
   
-  response.render('mtt.html', { output : output, mobs : mobs });
+  res.render('mtt.html', { output : output, mobs : mobs });
 });
 
 // listen for requests :)
