@@ -5,7 +5,6 @@ function Item(data) {
   this.name = data.name;
 }
 
-
 function ItemStack() {
   this.items = [];
   

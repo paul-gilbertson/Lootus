@@ -52,7 +52,7 @@ app.use(function (req, res, next) {
 
 // http://expressjs.com/en/starter/basic-routing.html
 app.get("/", function (req, res) {
-  if (req.playerData.status == "dead") {
+  if (req.playerData.player.status == "dead") {
     res.render('dead.html', { score : req.playerData.player.score, statusData : req.playerData.player.statusData });
   } else if (req.playerData.player.status == "home") {
     res.render('home.html', { data : req.playerData });

@@ -42,30 +42,10 @@
       
       <div id="dirCtrl">
         Moves: {{ data.player.moves }} -
-            {% if data.map.getTile(data.player.position.x, data.player.position.y).doors[3] == 1 %}
-            <button id="West">&lt;</button>
-            {% endif %}
-            {% if data.map.getTile(data.player.position.x, data.player.position.y).doors[3] == 2 %}
-            <button id="XWest">&lt; Exit</button>
-            {% endif %}
-          {% if data.map.getTile(data.player.position.x, data.player.position.y).doors[0] == 1 %}
-          <button id="North">^</button>
-          {% endif %}
-          {% if data.map.getTile(data.player.position.x, data.player.position.y).doors[0] == 2 %}
-          <button id="XNorth">^ Exit</button>
-          {% endif %}
-          {% if data.map.getTile(data.player.position.x, data.player.position.y).doors[2] == 1 %}
-          <button id="South">v</button>
-          {% endif %}
-          {% if data.map.getTile(data.player.position.x, data.player.position.y).doors[2] == 2 %}
-          <button id="XSouth">v Exit</button>
-          {% endif %}
-            {% if data.map.getTile(data.player.position.x, data.player.position.y).doors[1] == 1 %}
-            <button id="East">&gt;</button>
-            {% endif %}
-            {% if data.map.getTile(data.player.position.x, data.player.position.y).doors[1] == 2 %}
-            <button id="XEast">&gt; Exit</button>
-            {% endif %}
+        <button door="{{ data.map.getTile(data.player.position.x, data.player.position.y).doors[3] }}" id="West"><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span></button>
+        <button door="{{ data.map.getTile(data.player.position.x, data.player.position.y).doors[0] }}" id="North"><span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span></button>
+        <button door="{{ data.map.getTile(data.player.position.x, data.player.position.y).doors[2] }}" id="South"><span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span></button>
+        <button door="{{ data.map.getTile(data.player.position.x, data.player.position.y).doors[1] }}" id="East"><span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span></button>
       </div>
       
       <h2>Mobs</h2>
