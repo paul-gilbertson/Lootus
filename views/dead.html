@@ -30,6 +30,13 @@
         Ran out of moves.
         {% endif %}
         Score: {{ score }}</p>
+      <p>
+        {% for s in highscore.scores %}
+        <p>
+          {{ s.name }} - {{ s.score }}
+        </p>
+        {% endfor %}
+      </p>
       <a href="/reset">Reset</a>
     </div>
   </body>

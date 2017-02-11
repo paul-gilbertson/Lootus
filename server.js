@@ -5,6 +5,7 @@
 var combat = require('./combat.js');
 var map = require('./map.js');
 var item = require('./item.js');
+var store = require('./store.js');
 var nunjucks = require('nunjucks');
 var express = require('express');
 var session = require('express-session');
@@ -15,11 +16,15 @@ var dataSet = {};
 
 var newDataBlock = function () {
   return {
+    cName: 'Test',
     player: new combat.Player(),
     map: map.createMap(),
     logs : []
   };
 };
+
+var hs = new store.HighScore();
+hs.init(0.1);
 
 // we've started you off with Express, 
 // but feel free to use whatever libs or frameworks you'd like through `package.json`.
@@ -53,7 +58,7 @@ app.use(function (req, res, next) {
 // http://expressjs.com/en/starter/basic-routing.html
 app.get("/", function (req, res) {
   if (req.playerData.player.status == "dead") {
-    res.render('dead.html', { score : req.playerData.player.score, statusData : req.playerData.player.statusData });
+    res.render('dead.html', { score : req.playerData.player.score, statusData : req.playerData.player.statusData, highscore : hs.getData() });
   } else if (req.playerData.player.status == "home") {
     res.render('home.html', { data : req.playerData });
   } else {
@@ -81,6 +86,7 @@ app.get("/move/:direction", function (req, res) {
     if (data.player.moves < 0) {
       data.player.status = "dead";
       data.player.statusData = { killType : "moves" };
+      hs.addScore(data.cName, data.player.score);
     }
   } else if (ct.doors[req.params.direction] == 2) {
     data.player.status = "home";
@@ -117,6 +123,7 @@ app.get("/combat/:index", function (req, res) {
   combat.doMonsterMove(data.map.getPlayerTile(data.player).mobStack, data.player, data.logs);
   
   if (data.player.hp <= 0) {
+    hs.addScore(data.cName, data.player.score);
     res.json({ "status" : "dead" });
   } else {
     res.json({ "status" : "alive" });
