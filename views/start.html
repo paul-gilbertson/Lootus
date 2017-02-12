@@ -22,23 +22,14 @@
       <h1>Lootus</h1>
       <h3>Get in. Grab the loot. Get out.</h3>
       
-      <p>You are dead. 
-        {% if statusData.killType == "mob" %}
-        Killed by {{ statusData.killer }}.
-        {% endif %}
-        {% if statusData.killType == "moves" %}
-        Ran out of moves.
-        {% endif %}
-        Score: {{ score }}</p>
-      <p>
-        <h3>High Scores for v{{ highscore.version }}</h3>
-        {% for s in highscore.scores %}
-        <div>
-          {{ s.name }} - {{ s.score }}
-        </div>
-        {% endfor %}
-      </p>
-      <a href="/reset" class="btn btn-success">Play Again</a>
+      <p>Welcome to Lootus</p>
+      <form action="/start" method="GET">
+        <p>
+          <input type="text" name="name" autofocus="true" placeholder="Character name" value="{{ data.player.name }}"/>
+        </p><p>
+          <input type="submit" value="Start" class="btn btn-success"/>
+        </p>
+      </form>
     </div>
   </body>
 </html>

@@ -25,7 +25,8 @@ function Mob(mob) {
 }
 
 function Player() {
-  this.status = "alive";
+  this.status = "start";
+  this.name = '';
   this.statusData = {};
   this.moves = 8;
   this.hp = 10;

@@ -16,7 +16,6 @@ var dataSet = {};
 
 var newDataBlock = function () {
   return {
-    cName: 'Test',
     player: new combat.Player(),
     map: map.createMap(),
     logs : []
@@ -61,6 +60,8 @@ app.get("/", function (req, res) {
     res.render('dead.html', { score : req.playerData.player.score, statusData : req.playerData.player.statusData, highscore : hs.getData() });
   } else if (req.playerData.player.status == "home") {
     res.render('home.html', { data : req.playerData });
+  } else if (req.playerData.player.status == "start") {
+    res.render('start.html', { data : req.playerData });
   } else {
     res.render('index.html', { data : req.playerData, logs : req.playerData.logs.join(" "), id : req.session.gid });
   }
@@ -86,7 +87,7 @@ app.get("/move/:direction", function (req, res) {
     if (data.player.moves < 0) {
       data.player.status = "dead";
       data.player.statusData = { killType : "moves" };
-      hs.addScore(data.cName, data.player.score);
+      hs.addScore(data.player.name, data.player.score);
     }
   } else if (ct.doors[req.params.direction] == 2) {
     data.player.status = "home";
@@ -98,7 +99,9 @@ app.get("/move/:direction", function (req, res) {
 });
 
 app.get("/reset", function (req, res) {
-  dataSet[req.session.gid] = newDataBlock();  
+  var name = req.playerData.player.name;
+  dataSet[req.session.gid] = newDataBlock();
+  dataSet[req.session.gid].player.name = name;
   
   res.redirect('/');
 });
@@ -123,7 +126,7 @@ app.get("/combat/:index", function (req, res) {
   combat.doMonsterMove(data.map.getPlayerTile(data.player).mobStack, data.player, data.logs);
   
   if (data.player.hp <= 0) {
-    hs.addScore(data.cName, data.player.score);
+    hs.addScore(data.player.name, data.player.score);
     res.json({ "status" : "dead" });
   } else {
     res.json({ "status" : "alive" });
@@ -141,6 +144,13 @@ app.get("/inventory/:index/use", function (req, res) {
   data.player.inventory.removeItem(req.params.index);
   data.player.moves += 3;
   res.json({ "status" : "done" });
+});
+
+app.get("/start", function (req, res) {
+  var data = req.playerData;
+  data.player.status = "alive";
+  data.player.name = req.query.name;
+  res.redirect('/');
 });
 
 app.get("/mtt", function (req, res) {
