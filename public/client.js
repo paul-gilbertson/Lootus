@@ -18,6 +18,7 @@ var doorFn = function (btn) {
     btn.addClass('btn btn-primary');
   } else if (btn.attr('door') == 2) {
     btn.addClass('btn btn-success');
+    btn.children('span').removeClass().addClass('glyphicon glyphicon-home');
   } else if (btn.attr('door') == 0) {
     btn.addClass('btn');
     btn.prop('disabled', true);

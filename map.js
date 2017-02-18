@@ -14,7 +14,6 @@ function MapTile(data) {
   
   this.mobs = data.mobs;
   this.mobStack = new combat.MobStack();
-  this.mobStack.spawnRoom(this.mobs);
   
   this.itemStack = new item.ItemStack();
   
@@ -23,9 +22,10 @@ function MapTile(data) {
   };
 }
 
-function Map() {
-  this.width = 5;
-  this.height = 5;
+function Map(scale, depth) {
+  this.width = scale;
+  this.height = scale;
+  this.depth = depth;
   this.tiles = [];
   
   this.getTile = function (x, y) {
@@ -106,13 +106,15 @@ var addTile = function (map, x, y, id, list) {
     list.push({ x : x - 1, y : y});
   }
   
+  mt.mobStack.spawnRoom(mt.mobs, map.depth);
+  
   return true;
 };
 
-var createMap = function () {
+var createMap = function (depth) {
   var iter = 0;
-  var maxIter = 500000;
-  var m = new Map();
+  var maxIter = 500000 + (depth * 10000);
+  var m = new Map(5 + Math.floor(depth / 3), depth);
   var list = [];
   
   addTile(m, 0, 2, 0, list);

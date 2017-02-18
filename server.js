@@ -17,13 +17,13 @@ var dataSet = {};
 var newDataBlock = function () {
   return {
     player: new combat.Player(),
-    map: map.createMap(),
+    map: map.createMap(0),
     logs : []
   };
 };
 
 var hs = new store.HighScore();
-hs.init(0.1);
+hs.init('0.2.0');
 
 // we've started you off with Express, 
 // but feel free to use whatever libs or frameworks you'd like through `package.json`.
@@ -49,21 +49,21 @@ app.use(function (req, res, next) {
     dataSet[req.session.gid] = newDataBlock();
   }
   
-  req.playerData = dataSet[req.session.gid];
+  req.gameData = dataSet[req.session.gid];
   
   next();
 });
 
 // http://expressjs.com/en/starter/basic-routing.html
 app.get("/", function (req, res) {
-  if (req.playerData.player.status == "dead") {
-    res.render('dead.html', { score : req.playerData.player.score, statusData : req.playerData.player.statusData, highscore : hs.getData() });
-  } else if (req.playerData.player.status == "home") {
-    res.render('home.html', { data : req.playerData });
-  } else if (req.playerData.player.status == "start") {
-    res.render('start.html', { data : req.playerData });
+  if (req.gameData.player.status == "dead") {
+    res.render('dead.html', { score : req.gameData.player.score, statusData : req.gameData.player.statusData, highscore : hs.getData() });
+  } else if (req.gameData.player.status == "home") {
+    res.render('home.html', { data : req.gameData });
+  } else if (req.gameData.player.status == "start") {
+    res.render('start.html', { data : req.gameData });
   } else {
-    res.render('index.html', { data : req.playerData, logs : req.playerData.logs.join(" "), id : req.session.gid });
+    res.render('index.html', { data : req.gameData, logs : req.gameData.logs.join(" "), id : req.session.gid });
   }
 });
 
@@ -72,7 +72,7 @@ app.get("/data", function (req, res) {
 });
 
 app.get("/move/:direction", function (req, res) {
-  var data = req.playerData;
+  var data = req.gameData;
   var ct = data.map.getPlayerTile(data.player);
   if (ct == undefined || ct.doors[req.params.direction] == 0) { res.sendStatus(500); return; }
   
@@ -99,7 +99,7 @@ app.get("/move/:direction", function (req, res) {
 });
 
 app.get("/reset", function (req, res) {
-  var name = req.playerData.player.name;
+  var name = req.gameData.player.name;
   dataSet[req.session.gid] = newDataBlock();
   dataSet[req.session.gid].player.name = name;
   
@@ -107,10 +107,11 @@ app.get("/reset", function (req, res) {
 });
 
 app.get("/run", function (req, res) {
-  var data = req.playerData;
+  var data = req.gameData;
   data.player.status = "alive";
   data.player.statusData = {};
-  data.map = map.createMap();
+  data.player.depth++;
+  data.map = map.createMap(data.player.depth);
   data.player.position = { x : 0, y : 2 };
   data.player.hp = 10;
   
@@ -120,7 +121,7 @@ app.get("/run", function (req, res) {
 });
 
 app.get("/combat/:index", function (req, res) {
-  var data = req.playerData;
+  var data = req.gameData;
   data.logs = [];
   combat.doCombat(data.player, data.map.getPlayerTile(data.player), req.params.index, data.logs);
   combat.doMonsterMove(data.map.getPlayerTile(data.player).mobStack, data.player, data.logs);
@@ -134,27 +135,28 @@ app.get("/combat/:index", function (req, res) {
 });
 
 app.get("/loot/:index", function (req, res) {
-  var data = req.playerData;
+  var data = req.gameData;
   data.player.inventory.transferItem(data.map.getPlayerTile(data.player).itemStack, req.params.index);
   res.json({ "status" : "done" });
 });
 
 app.get("/inventory/:index/use", function (req, res) {
-  var data = req.playerData;
+  var data = req.gameData;
+  var item = data.player.inventory.items[req.params.index];
   data.player.inventory.removeItem(req.params.index);
-  data.player.moves += 3;
+  item.use(item, data);
   res.json({ "status" : "done" });
 });
 
 app.get("/start", function (req, res) {
-  var data = req.playerData;
+  var data = req.gameData;
   data.player.status = "alive";
   data.player.name = req.query.name;
   res.redirect('/');
 });
 
 app.get("/mtt", function (req, res) {
-  var data = req.playerData;
+  var data = req.gameData;
   var output = "";
   var m = data.map;
   var mobs = 0;

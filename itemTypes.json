@@ -1,6 +1,20 @@
 [
   {
     "id" : 0,
-    "name" : "Fuel"
+    "type" : "fuel",
+    "name" : "Fuel",
+    "itemData" : { "fuelValue" : 3 }
+  },
+  {
+    "id" : 1,
+    "type" : "fuel",
+    "name" : "Dense Fuel",
+    "itemData" : { "fuelValue" : 5 }
+  },
+  {
+    "id" : 1,
+    "type" : "weapon",
+    "name" : "Sharp Dagger",
+    "itemData" : { "attack" : { "x" : 1, "y" : 5 } }
   }
 ]

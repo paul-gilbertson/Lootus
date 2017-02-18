@@ -19,6 +19,7 @@ function HighScore() {
     });
   };
   
+
   this.addScore = function (name, score) {
     if (data.scores.length > TOPX) {
       if (score > data.scores[TOPX - 1].score) {

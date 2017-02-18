@@ -3,24 +3,40 @@
     "name" : "Kobold",
     "hp" : 3,
     "attack" : { "x" : 1, "y" : 3 },
-    "xp" : 2
+    "xp" : 2,
+    "drops" : { "table" : 1, "bonus" : 0},
+    "spawnValue" : 12
   },
   {
     "name" : "Slime",
     "hp" : 1,
     "attack" : { "x" : 1, "y" : 1 },
-    "xp" : 1
+    "xp" : 1,
+    "drops" : { "table" : 0, "bonus" : 0},
+    "spawnValue" : 8
   },
   {
     "name" : "Orc",
     "hp" : 3,
     "attack" : { "x" : 2, "y" : 2 },
-    "xp" : 5
+    "xp" : 5,
+    "drops" : { "table" : 0, "bonus" : 0},
+    "spawnValue" : 16
   },
   {
     "name" : "Troll",
     "hp" : 8,
     "attack" : { "x" : 1, "y" : 2 },
-    "xp" : 10
+    "xp" : 10,
+    "drops" : { "table" : 0, "bonus" : 50},
+    "spawnValue" : 20
+  },
+  {
+    "name" : "Dragon",
+    "hp" : 20,
+    "attack" : { "x" : 2, "y" : 4 },
+    "xp" : 10,
+    "drops" : { "table" : 0, "bonus" : 50},
+    "spawnValue" : 40
   }
 ]
